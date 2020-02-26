@@ -32,18 +32,26 @@ const Camp = props => {
     state
   } = camp;
 
-  let fav = <button type="radio" name={`fav${facilityName}`} />;
-  console.log("camp here::::", camp);
-  // if(star.isFav){
-  //     star = solidStar
-  // } else {
-  //     star = regStar
-  // }
+    const postToFavs = (data) => {
+    console.log(data, "This is data coming from the form");
+      fetch('/user/favorite', {
+        method: 'POST', // or 'PUT'
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      .then((response) => response.json())
+      .then((newData) => {
+        console.log('Success:', newData);
+        // window.location.href = `http://localhost:8080/habit/${id}/input/cal`;
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    }
 
-  // let FavIcon;
-  // if (isFav) FavIcon = (<span className="favIcon"><FAIcon onClick={() => favClicked(id)} icon={solidStar} style={{ color: 'steelblue' }} /></span>);
-  // else FavIcon = (<span className="favIcon"><FAIcon onClick={() => favClicked(id)} icon={regStar} /></span>);
-
+    let fav = <button type="radio" name={`fav${facilityName}`} onClick={`${postToFavs}`} />
 
     // let FavIcon;
     // if (isFav) FavIcon = (<span className="favIcon"><FAIcon onClick={() => favClicked(id)} icon={solidStar} style={{ color: 'steelblue' }} /></span>);
