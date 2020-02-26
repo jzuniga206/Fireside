@@ -36,20 +36,20 @@ class App extends Component {
     */
 
     this.state = {
-        pet: false,
-        state: "",
-        sewerHook: false,
-        waterHook: false,
-        waterFront: false,
+      pet: false,
+      state: '',
+      sewerHook: false,
+      waterHook: false,
+      waterFront: false,
 
-        queriedGrounds: [],
-        queried: false,
-        hasFavs: false,
-        loggedIn: false,
-        signedUp: false,
-        userId: -1,
-    }
-    
+      queriedGrounds: [],
+      queried: false,
+      hasFavs: false,
+      loggedIn: false,
+      signedUp: false,
+      userId: -1
+    };
+
     this.signup = this.signup.bind(this);
     this.login = this.login.bind(this);
     this.petOnChange = this.petOnChange.bind(this);
@@ -66,7 +66,8 @@ class App extends Component {
 
   signup(e) {
     e.preventDefault();
-    const user = e.target.email.value;
+    const name = e.target.name.value;
+    const user = e.target.username.value;
     const pass = e.target.password.value;
     console.log('entered signup');
     fetch('/user/signup', {
@@ -75,6 +76,7 @@ class App extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
+        name: name,
         username: user,
         password: pass
       })
@@ -109,6 +111,12 @@ class App extends Component {
     })
       .then(res => res.json())
       .then(data => {
+        // if password doesnt match db, reload login (root '/') directory
+        if (data.badPassword) {
+          window.location.reload();
+          return;
+        }
+
         if (data) {
           const newState = Object.assign({}, this.state);
           newState.loggedIn = true;
@@ -117,7 +125,8 @@ class App extends Component {
           console.log(this.state.loggedIn);
           console.log('reset state');
         }
-      });
+      })
+      .catch(error => console.log(error));
   }
 
   query(e) {
