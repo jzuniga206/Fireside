@@ -11,14 +11,14 @@ userController.login = (req, res, next) => {
   db.query(text, user, (err, data) => {
     if (err) {
       console.log(err);
-      return next(err);
+      res.locals.badPassword = true;
+      return next();
     }
-
-    console.log('data from postgres: ', data.rows[0].password);
 
     if (data.rows[0].password !== password) {
       console.log('password did not match');
-      return next(err);
+      res.locals.badPassword = true;
+      return next();
     } else {
       res.locals.user = data.rows[0];
       console.log(res.locals, 'this is locals inside login middleware');
@@ -47,14 +47,15 @@ userController.deleteUser = (req, res, next) => {
 };
 
 userController.createUser = (req, res, next) => {
+  const name = req.body.name;
   const user = req.body.username;
   const password = req.body.password;
 
   console.log('expresscreate user: ', user);
   console.log('expresscreate pass: ', password);
 
-  const text = `INSERT INTO users (username, password, loggedin) VALUES ($1, $2, $3)`;
-  const values = [user, password, true];
+  const text = `INSERT INTO users (name, username, password) VALUES ($1, $2, $3)`;
+  const values = [name, user, password];
 
   db.query(text, values)
     .then(response => {
