@@ -26,12 +26,13 @@ INSERT INTO the favorites table on the database with both the userID and the lis
 */
 
 const Results = props => {
-  const { queriedGrounds } = props;
+  const { queriedGrounds, getWeather } = props;
+  
   let homeButton;
   let tableResults;
 
   const results = queriedGrounds.map(curr => {
-    return <Camp camp={curr} />;
+    return <Camp camp={curr} getWeather={getWeather}/>;
   });
 
   // if(results.length > 0){
@@ -78,9 +79,10 @@ const Results = props => {
               <th>Longitude</th>
               <th>Latitude</th>
               <th>Favorite</th>
+              <th>Weather</th>
             </tr>
           </thead>
-          <tbody>{results}</tbody>
+      <tbody>{results}</tbody>
         </Table>
       </div>
       {/* {homeButton} */}

@@ -12,6 +12,8 @@ import "./components/stylesheet.css";
 
 // const parseString = require("xml2js").parseString;
 
+
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -58,6 +60,8 @@ class App extends Component {
     this.waterFrontOnChange = this.waterFrontOnChange.bind(this);
     this.stateOnChange = this.stateOnChange.bind(this);
     this.query = this.query.bind(this);
+    this.getWeather = this.getWeather.bind(this);
+
   }
 
   componentDidMount() {
@@ -207,6 +211,21 @@ class App extends Component {
     }
   }
 
+  getWeather(lat, long)  {
+    // console.log('eeeeeeekfj;kaj', e.target)
+
+    fetch(`https://api.darksky.net/forecast/'INSERT KEY HERE'/${lat},${long}?exclude=currently,minutely,hourly,alerts,flags`)
+    .then(res => res.json())
+    .then(data => {
+      console.log('data>>>>', data)
+      // const newState = Object.assign({}, this.state);
+      // newState.queriedGrounds = data;
+      // newState.queried = true;
+      // console.log(newState);
+      // this.setState(newState);
+    });
+  }
+
   render() {
     //variable declared for dynamic rendering of our pages based upon the results of async fetch requests
     let loggedin = this.state.loggedIn;
@@ -244,7 +263,7 @@ class App extends Component {
             exact
             path="/results"
             render={() => (
-              <Results queriedGrounds={this.state.queriedGrounds} />
+              <Results queriedGrounds={this.state.queriedGrounds} getWeather={this.getWeather}/>
             )}
           />
           <Route exact path="/signup">

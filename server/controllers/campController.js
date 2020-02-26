@@ -34,8 +34,13 @@ campController.query = (req, res, next) => {
   // console.log(apiString);
 
   const campOptions = {
+
     url: (apiString += process.env.CAMPGROUND_KEY),
     method: "GET",
+// =======
+//     url: apiString  += '7zfwzuqf57fwnbv3sdkgc66j',
+//     method: 'GET',
+
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json;charset=UTF-8"
