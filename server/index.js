@@ -1,5 +1,5 @@
-const { Pool } = require('pg');
-const PG_URI = require('./PG_URI');
+const { Pool } = require("pg");
+const { PG_URI } = require("./PG_URI");
 
 /*
 this is a link to eli's elephantSQL. it would be better practice to store the db key in the .env
@@ -20,7 +20,7 @@ const pool = new Pool({
 // This will be required in the controllers to be the access point to the database
 module.exports = {
   query: (text, params, callback) => {
-    console.log('executed query', text);
+    console.log("executed query", text);
     return pool.query(text, params, callback);
   }
 };
