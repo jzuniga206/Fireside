@@ -43,9 +43,11 @@ const Camp = props => {
                 <td><strong>{sitesWithSewerHookup}</strong></td>
                 <td><strong>{sitesWithWaterHookup}</strong></td>
                 <td><strong>{sitesWithWaterFront}</strong></td>
-                <td><strong>{longitude}</strong></td>
-                <td><strong>{latitude}</strong></td>
+                <td id="longitude"><strong>{longitude}</strong></td>
+                <td id="latitude" value={latitude}><strong>{latitude}</strong></td>
                 <td className="fav"><strong>{fav}</strong></td>
+                <td><button className="fav" onClick={()=>props.getWeather(latitude, longitude)}
+                >Get Weather</button></td>
             </tr>
         // </ReactFragment>
     )
