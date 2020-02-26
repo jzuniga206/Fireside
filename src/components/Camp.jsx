@@ -23,7 +23,28 @@ const Camp = props => {
     const { camp } = props;
     const { facilityName , latitude, longitude, sitesWithPetsAllowed, sitesWithSewerHookup, sitesWithWaterHookup, sitesWithWaterFront, state} = camp;
 
-    let fav = <button type="radio" name={`fav${facilityName}`} />
+    const postToFavs = (data) => {
+    console.log(data, "This is data coming from the form");
+      fetch('/user/favorite', {
+        method: 'POST', // or 'PUT'
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      .then((response) => response.json())
+      .then((newData) => {
+        console.log('Success:', newData);
+        // window.location.href = `http://localhost:8080/habit/${id}/input/cal`;
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    }
+
+    let fav = <button type="radio" name={`fav${facilityName}`} onClick={`${postToFavs}`} />
+
+
 
     // if(star.isFav){
     //     star = solidStar
