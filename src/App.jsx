@@ -6,13 +6,10 @@ import Login from "./components/Login.jsx";
 import Results from "./components/Results.jsx";
 import { Route, Switch, Redirect } from "react-router-dom";
 import Signup from "./components/Signup.jsx";
-import { Button } from "reactstrap";
 
 import "./components/stylesheet.css";
 
 // const parseString = require("xml2js").parseString;
-
-
 
 class App extends Component {
   constructor(props) {
@@ -60,13 +57,15 @@ class App extends Component {
     this.waterFrontOnChange = this.waterFrontOnChange.bind(this);
     this.stateOnChange = this.stateOnChange.bind(this);
     this.query = this.query.bind(this);
-    this.getWeather = this.getWeather.bind(this);
-
   }
 
   componentDidMount() {
     console.log("mounted");
   }
+
+  // setShowModal(e) {
+  //   this.setState({showModal: true})
+  // }
 
   signup(e) {
     e.preventDefault();
@@ -211,21 +210,6 @@ class App extends Component {
     }
   }
 
-  getWeather(lat, long)  {
-    // console.log('eeeeeeekfj;kaj', e.target)
-
-    fetch(`https://api.darksky.net/forecast/'INSERT KEY HERE'/${lat},${long}?exclude=currently,minutely,hourly,alerts,flags`)
-    .then(res => res.json())
-    .then(data => {
-      console.log('data>>>>', data)
-      // const newState = Object.assign({}, this.state);
-      // newState.queriedGrounds = data;
-      // newState.queried = true;
-      // console.log(newState);
-      // this.setState(newState);
-    });
-  }
-
   render() {
     //variable declared for dynamic rendering of our pages based upon the results of async fetch requests
     let loggedin = this.state.loggedIn;
@@ -263,7 +247,10 @@ class App extends Component {
             exact
             path="/results"
             render={() => (
-              <Results queriedGrounds={this.state.queriedGrounds} getWeather={this.getWeather}/>
+              <Results
+                queriedGrounds={this.state.queriedGrounds}
+                getWeather={this.getWeather}
+              />
             )}
           />
           <Route exact path="/signup">

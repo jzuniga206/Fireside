@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
+const fetch = require("node-fetch");
 const userController = {};
-const db = require('../index.js');
+const db = require("../index.js");
 
 userController.login = (req, res, next) => {
   const user = [req.body.username];
@@ -14,14 +14,14 @@ userController.login = (req, res, next) => {
       return next(err);
     }
 
-    console.log('data from postgres: ', data.rows[0].password);
+    console.log("data from postgres: ", data.rows[0].password);
 
     if (data.rows[0].password !== password) {
-      console.log('password did not match');
+      console.log("password did not match");
       return next(err);
     } else {
       res.locals.user = data.rows[0];
-      console.log(res.locals, 'this is locals inside login middleware');
+      console.log(res.locals, "this is locals inside login middleware");
       return next();
     }
   });
@@ -50,20 +50,20 @@ userController.createUser = (req, res, next) => {
   const user = req.body.username;
   const password = req.body.password;
 
-  console.log('expresscreate user: ', user);
-  console.log('expresscreate pass: ', password);
+  console.log("expresscreate user: ", user);
+  console.log("expresscreate pass: ", password);
 
   const text = `INSERT INTO users (username, password, loggedin) VALUES ($1, $2, $3)`;
   const values = [user, password, true];
 
   db.query(text, values)
     .then(response => {
-      console.log('res in login: ', response);
+      console.log("res in login: ", response);
       res.locals.user = response.rows;
       return next();
     })
     .catch(err => {
-      console.log('Error: ', err);
+      console.log("Error: ", err);
       return next(err);
     });
 };
@@ -93,25 +93,24 @@ userController.addFav = (req, res, next) => {
       return next();
     })
     .catch(err => {
-      console.log('Error: from adding favorites', err);
+      console.log("Error: from adding favorites", err);
       return next(err);
     });
 };
 
 userController.getFav = (req, res, next) => {
-
   const text = `SELECT * FROM campground WHERE campground_id in
   (
   select campground_id from favorites where user_id = ${req.body.user_id}
   )`;
-// we're requesting data from the req body
+  // we're requesting data from the req body
   db.query(text, value)
     .then(response => {
       res.locals.user = response.rows;
       return next();
     })
     .catch(err => {
-      console.log('Error: from GETTING FAVORITES', err);
+      console.log("Error: from GETTING FAVORITES", err);
       return next(err);
     });
 };
@@ -127,7 +126,7 @@ userController.deleteFav = (req, res, next) => {
       return next();
     })
     .catch(err => {
-      console.log('Error: ', err);
+      console.log("Error: ", err);
       return next(err);
     });
 };
