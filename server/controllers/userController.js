@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
+const fetch = require("node-fetch");
 const userController = {};
-const db = require('../index.js');
+const db = require("../index.js");
 
 userController.login = (req, res, next) => {
   const user = [req.body.username];
@@ -15,13 +15,16 @@ userController.login = (req, res, next) => {
       return next();
     }
 
+
+    console.log("data from postgres: ", data.rows[0].password);
+
     if (data.rows[0].password !== password) {
       console.log('password did not match');
       res.locals.badPassword = true;
       return next();
     } else {
       res.locals.user = data.rows[0];
-      console.log(res.locals, 'this is locals inside login middleware');
+      console.log(res.locals, "this is locals inside login middleware");
       return next();
     }
   });
@@ -51,20 +54,20 @@ userController.createUser = (req, res, next) => {
   const user = req.body.username;
   const password = req.body.password;
 
-  console.log('expresscreate user: ', user);
-  console.log('expresscreate pass: ', password);
+  console.log("expresscreate user: ", user);
+  console.log("expresscreate pass: ", password);
 
   const text = `INSERT INTO users (name, username, password) VALUES ($1, $2, $3)`;
   const values = [name, user, password];
 
   db.query(text, values)
     .then(response => {
-      console.log('res in login: ', response);
+      console.log("res in login: ", response);
       res.locals.user = response.rows;
       return next();
     })
     .catch(err => {
-      console.log('Error: ', err);
+      console.log("Error: ", err);
       return next(err);
     });
 };
@@ -94,7 +97,7 @@ userController.addFav = (req, res, next) => {
       return next();
     })
     .catch(err => {
-      console.log('Error: from adding favorites', err);
+      console.log("Error: from adding favorites", err);
       return next(err);
     });
 };
@@ -121,18 +124,20 @@ userController.addCampFav = (req, res, next) => {
 // Users table & Favs table will stay the same
 
 userController.getFav = (req, res, next) => {
+
   console.log(req.params, "THIS IS REQ PARAMS");
   const value  = [req.params.id] ;
 
   const text = `SELECT c.* FROM camps c INNER JOIN favorites f ON c.id = f.camp_id WHERE f.user_id = $1`;
 // we're requesting data from the req body
+
   db.query(text, value)
     .then(response => {
       res.locals.user = response.rows;
       return next();
     })
     .catch(err => {
-      console.log('Error: from GETTING FAVORITES', err);
+      console.log("Error: from GETTING FAVORITES", err);
       return next(err);
     });
 };
@@ -148,7 +153,7 @@ userController.deleteFav = (req, res, next) => {
       return next();
     })
     .catch(err => {
-      console.log('Error: ', err);
+      console.log("Error: ", err);
       return next(err);
     });
 };

@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+
 import {
   Container,
   Button,
@@ -7,7 +8,8 @@ import {
   Label,
   Input,
   FormText
-} from 'reactstrap';
+} from "reactstrap";
+
 
 /* this logic correctly redirects the page to the proper page upon resolution of async 
  response from the POST request in this.props.signup via setState in the main App.jsx */
