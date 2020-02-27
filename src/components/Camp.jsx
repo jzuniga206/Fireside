@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 // import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
 // import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
 // import { faStar as regStar } from '@fortawesome/free-regular-svg-icons';
@@ -13,6 +13,7 @@ import {
   FormText,
   Table
 } from "reactstrap";
+import WeatherModal from "./WeatherModal.jsx";
 
 /*
 As mentioned in Results.jsx, the major work in Camp.jsx that needs to be done includes creating a function
@@ -31,49 +32,65 @@ const Camp = props => {
     sitesWithWaterFront,
     state
   } = camp;
+  const [showModal, setShow] = useState(false);
 
-    const postToFavs = (data) => {
-    console.log(data, "This is data coming from the form");
-      fetch('/user/favorite', {
-        method: 'POST', // or 'PUT'
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-      .then((response) => response.json())
-      .then((newData) => {
-        console.log('Success:', newData);
-        // window.location.href = `http://localhost:8080/habit/${id}/input/cal`;
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-    }
+  let fav = <button type="radio" name={`fav${facilityName}`} />;
 
-    let fav = <button type="radio" name={`fav${facilityName}`} onClick={`${postToFavs}`} />
+  function closeModal() {
+    setShow(false);
+  }
 
-    // let FavIcon;
-    // if (isFav) FavIcon = (<span className="favIcon"><FAIcon onClick={() => favClicked(id)} icon={solidStar} style={{ color: 'steelblue' }} /></span>);
-    // else FavIcon = (<span className="favIcon"><FAIcon onClick={() => favClicked(id)} icon={regStar} /></span>);
-
-    return (
-        // <ReactFragment className="CampFrag">
-            <tr className="CampRow">
-                <td><strong>{facilityName}</strong></td>
-                <td><strong>{sitesWithPetsAllowed}</strong></td>
-                <td><strong>{sitesWithSewerHookup}</strong></td>
-                <td><strong>{sitesWithWaterHookup}</strong></td>
-                <td><strong>{sitesWithWaterFront}</strong></td>
-                <td id="longitude"><strong>{longitude}</strong></td>
-                <td id="latitude" value={latitude}><strong>{latitude}</strong></td>
-                <td className="fav"><strong>{fav}</strong></td>
-                <td><button className="fav" onClick={()=>props.getWeather(latitude, longitude)}
-                >Get Weather</button></td>
-            </tr>
-        // </ReactFragment>
-    )
-
+  return (
+    // <ReactFragment className="CampFrag">
+    <tr className="CampRow">
+      <td>
+        <strong>{facilityName}</strong>
+      </td>
+      <td>
+        <strong>{sitesWithPetsAllowed}</strong>
+      </td>
+      <td>
+        <strong>{sitesWithSewerHookup}</strong>
+      </td>
+      <td>
+        <strong>{sitesWithWaterHookup}</strong>
+      </td>
+      <td>
+        <strong>{sitesWithWaterFront}</strong>
+      </td>
+      <td id="longitude">
+        <strong>{longitude}</strong>
+      </td>
+      <td id="latitude" value={latitude}>
+        <strong>{latitude}</strong>
+      </td>
+      <td className="fav">
+        <strong>{fav}</strong>
+      </td>
+      <td>
+        <button
+          className="fav"
+          onClick={e => {
+            setShow(true);
+          }}
+        >
+          Get Weather
+        </button>
+      </td>
+      <div>
+        <WeatherModal
+          close={closeModal}
+          showModal={showModal}
+          latitude={latitude}
+          longitude={longitude}
+          getWeather={props.getWeather}
+        />
+      </div>
+    </tr>
+    // </ReactFragment>
+  );
 };
 
 export default Camp;
+
+// ()=>props.getWeather(latitude, longitude)

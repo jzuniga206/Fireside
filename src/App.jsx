@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import axios from 'axios';
 import Query from './components/Query.jsx';
@@ -58,12 +59,15 @@ class App extends Component {
     this.waterFrontOnChange = this.waterFrontOnChange.bind(this);
     this.stateOnChange = this.stateOnChange.bind(this);
     this.query = this.query.bind(this);
-    this.getWeather = this.getWeather.bind(this);
   }
 
   componentDidMount() {
     console.log('mounted');
   }
+
+  // setShowModal(e) {
+  //   this.setState({showModal: true})
+  // }
 
   signup(e) {
     e.preventDefault();
@@ -209,21 +213,6 @@ class App extends Component {
       newState.waterFront = false;
       this.setState(newState);
     }
-  }
-
-  getWeather(lat, long) {
-    fetch(
-      `https://api.darksky.net/forecast/'INSERT KEY HERE'/${lat},${long}?exclude=currently,minutely,hourly,alerts,flags`
-    )
-      .then(res => res.json())
-      .then(data => {
-        console.log('data>>>>', data);
-        // const newState = Object.assign({}, this.state);
-        // newState.queriedGrounds = data;
-        // newState.queried = true;
-        // console.log(newState);
-        // this.setState(newState);
-      });
   }
 
   render() {
