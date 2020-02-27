@@ -1,15 +1,17 @@
-import React, { Component } from "react";
-import axios from "axios";
-import Query from "./components/Query.jsx";
-import Landing from "./components/Landing.jsx";
-import Login from "./components/Login.jsx";
-import Results from "./components/Results.jsx";
-import { Route, Switch, Redirect } from "react-router-dom";
-import Signup from "./components/Signup.jsx";
 
-import "./components/stylesheet.css";
+import React, { Component } from 'react';
+import axios from 'axios';
+import Query from './components/Query.jsx';
+import Landing from './components/Landing.jsx';
+import Login from './components/Login.jsx';
+import Results from './components/Results.jsx';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import Signup from './components/Signup.jsx';
+import { Button } from 'reactstrap';
 
-// const parseString = require("xml2js").parseString;
+import './components/stylesheet.css';
+
+const parseString = require('xml2js').parseString;
 
 class App extends Component {
   constructor(props) {
@@ -36,14 +38,14 @@ class App extends Component {
 
     this.state = {
       pet: false,
-      state: "",
+      state: '',
       sewerHook: false,
       waterHook: false,
       waterFront: false,
 
       queriedGrounds: [],
       queried: false,
-      hasFavs: false,
+      hasFavs: true, // default value should be false
       loggedIn: false,
       signedUp: false,
       userId: -1
@@ -60,7 +62,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log("mounted");
+    console.log('mounted');
   }
 
   // setShowModal(e) {
@@ -69,15 +71,17 @@ class App extends Component {
 
   signup(e) {
     e.preventDefault();
-    const user = e.target.email.value;
+    const name = e.target.name.value;
+    const user = e.target.username.value;
     const pass = e.target.password.value;
-    console.log("entered signup");
-    fetch("/user/signup", {
-      method: "POST",
+    console.log('entered signup');
+    fetch('/user/signup', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
+        name: name,
         username: user,
         password: pass
       })
@@ -89,7 +93,7 @@ class App extends Component {
           newState.signedUp = true;
           this.setState(newState);
           console.log(this.state.signedUp);
-          console.log("signup complete");
+          console.log('signup complete');
         }
       });
   }
@@ -98,12 +102,11 @@ class App extends Component {
     e.preventDefault();
     const user = e.target.email.value;
     const pass = e.target.password.value;
-    console.log("login user: ", user);
-    console.log("login pass: ", pass);
-    fetch("/user/login", {
-      method: "POST",
+
+    fetch('/user/login', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         username: user,
@@ -112,25 +115,27 @@ class App extends Component {
     })
       .then(res => res.json())
       .then(data => {
+        // if password doesnt match db, reload login (root '/') directory
+        if (data.badPassword) {
+          window.location.reload();
+          return;
+        }
+
         if (data) {
           const newState = Object.assign({}, this.state);
           newState.loggedIn = true;
-          console.log("in here");
           this.setState(newState);
-          console.log(this.state.loggedIn);
-          console.log("reset state");
         }
-      });
+      })
+      .catch(error => console.log(error));
   }
 
   query(e) {
     e.preventDefault();
-    // console.log(e.target);
-    console.log("entered query");
-    fetch("/camp/query", {
-      method: "POST",
+    fetch('/camp/query', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         state: this.state.state,
@@ -152,14 +157,14 @@ class App extends Component {
 
   //the following functions could probably be combined somehow to make DRYer code.
   stateOnChange(e) {
-    console.log("stateOnChange called");
+    console.log('stateOnChange called');
     const newState = Object.assign({}, this.state);
     newState.state = e.target.value;
     this.setState(newState);
   }
 
   petOnChange() {
-    console.log("petOnChange called");
+    console.log('petOnChange called');
     if (this.state.pet === false) {
       const newState = Object.assign({}, this.state);
       newState.pet = true;
@@ -172,7 +177,7 @@ class App extends Component {
   }
 
   sewerHookOnChange() {
-    console.log("sewerHookOnChange called");
+    console.log('sewerHookOnChange called');
     if (this.state.sewerHook === false) {
       const newState = Object.assign({}, this.state);
       newState.sewerHook = true;
@@ -185,7 +190,7 @@ class App extends Component {
   }
 
   waterHookOnChange() {
-    console.log("waterHookOnChange called");
+    console.log('waterHookOnChange called');
     if (this.state.waterHook === false) {
       const newState = Object.assign({}, this.state);
       newState.waterHook = true;
@@ -198,7 +203,7 @@ class App extends Component {
   }
 
   waterFrontOnChange() {
-    console.log("waterFrontOnChange called");
+    console.log('waterFrontOnChange called');
     if (this.state.waterFront === false) {
       const newState = Object.assign({}, this.state);
       newState.waterFront = true;
@@ -220,18 +225,18 @@ class App extends Component {
     However, if we are at '/' and loggedin === false. we will render our Login page. */
 
     return (
-      <div className="container">
+      <div className='container'>
         <Switch>
-          <Route exact path="/">
+          <Route exact path='/'>
             {loggedin ? (
               <Landing hasFavs={this.state.hasFavs} />
             ) : (
               <Login login={this.login} />
             )}
           </Route>
-          <Route exact path="/camp">
+          <Route exact path='/camp'>
             {queryResponse ? (
-              <Redirect to="/results" />
+              <Redirect to='/results' />
             ) : (
               <Query
                 stateOnChange={this.stateOnChange}
@@ -245,7 +250,7 @@ class App extends Component {
           </Route>
           <Route
             exact
-            path="/results"
+            path='/results'
             render={() => (
               <Results
                 queriedGrounds={this.state.queriedGrounds}
@@ -253,22 +258,22 @@ class App extends Component {
               />
             )}
           />
-          <Route exact path="/signup">
+          <Route exact path='/signup'>
             {signedUp ? (
               <Landing hasFavs={this.state.hasFavs} />
             ) : (
               <Signup signup={this.signup} />
             )}
           </Route>
-          <Route exact path="/landing">
+          <Route exact path='/landing'>
             {queryResponse ? (
-              <Redirect to="/results" />
+              <Redirect to='/results' />
             ) : (
               <Login login={this.login} />
             )}
             render = {() => <Landing hasFavs={this.state.hasFavs} />}
           </Route>
-          <Route exact path="/landing/ayypresent">
+          <Route exact path='/landing/ayypresent'>
             <Landing hasFavs={this.state.hasFavs} />
           </Route>
         </Switch>

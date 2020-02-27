@@ -35,24 +35,10 @@ const Camp = props => {
   const [showModal, setShow] = useState(false);
 
   let fav = <button type="radio" name={`fav${facilityName}`} />;
-  console.log("camp here::::", camp);
 
   function closeModal() {
     setShow(false);
   }
-  // if(star.isFav){
-  //     star = solidStar
-  // } else {
-  //     star = regStar
-  // }
-
-  // let FavIcon;
-  // if (isFav) FavIcon = (<span className="favIcon"><FAIcon onClick={() => favClicked(id)} icon={solidStar} style={{ color: 'steelblue' }} /></span>);
-  // else FavIcon = (<span className="favIcon"><FAIcon onClick={() => favClicked(id)} icon={regStar} /></span>);
-
-  // let FavIcon;
-  // if (isFav) FavIcon = (<span className="favIcon"><FAIcon onClick={() => favClicked(id)} icon={solidStar} style={{ color: 'steelblue' }} /></span>);
-  // else FavIcon = (<span className="favIcon"><FAIcon onClick={() => favClicked(id)} icon={regStar} /></span>);
 
   return (
     // <ReactFragment className="CampFrag">
