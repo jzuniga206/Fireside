@@ -23,7 +23,7 @@ const Login = props => {
             type='text'
             name='email'
             id='email'
-            placeholder='Email'
+            placeholder='username'
             bsSize='large'
           />
         </FormGroup>
@@ -38,16 +38,18 @@ const Login = props => {
             placeholder='Password'
             bsSize='large'
           />
-          <Link to='/signup'>
-            <a href='./Signup.jsx' color='primary' className='signup'>
-              signup now
-            </a>
-          </Link>
         </FormGroup>
-        <Button bssize='lg' outline color='primary'>
-          Explore
-        </Button>
-        {/* <Button bssize="lg"className="LoginBtn" color="white" >Explore</Button> */}
+        <div className='login-btns'>
+          <Button bssize='lg' outline color='primary'>
+            Explore
+          </Button>
+          <Button bssize='lg' outline color='primary'>
+            <Link to='/signup'>Sign Up</Link>
+          </Button>
+        </div>
+        {/* <Button bssize='lg' outline color='primary'>
+          Sign Up
+        </Button> */}
       </Form>
     </div>
   );
