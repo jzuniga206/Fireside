@@ -107,14 +107,12 @@ userController.addCampFav = (req, res, next) => {
     });
 };
 
-// Users table & Favs table will stay the same
-
+// retrieves favorites for users upon login
 userController.getFav = (req, res, next) => {
   console.log(req.params, 'THIS IS REQ PARAMS');
   const value = [req.params.id];
 
   const text = `SELECT c.* FROM camps c INNER JOIN favorites f ON c.id = f.camp_id WHERE f.user_id = $1`;
-  // we're requesting data from the req body
 
   db.query(text, value)
     .then(response => {

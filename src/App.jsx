@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import Query from './components/Query.jsx';
 import Landing from './components/Landing.jsx';
 import Login from './components/Login.jsx';
 import Results from './components/Results.jsx';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import Signup from './components/Signup.jsx';
-import { Button } from 'reactstrap';
 
 import './components/stylesheet.css';
 
@@ -37,11 +35,11 @@ class App extends Component {
 
     this.state = {
       pet: false,
-      state: '',
+      state: 'AL',
       sewerHook: false,
       waterHook: false,
       waterFront: false,
-
+      invalidUsername: false,
       queriedGrounds: [],
       queried: false,
       hasFavs: true, // default value should be false
@@ -57,6 +55,7 @@ class App extends Component {
     this.sewerHookOnChange = this.sewerHookOnChange.bind(this);
     this.waterFrontOnChange = this.waterFrontOnChange.bind(this);
     this.stateOnChange = this.stateOnChange.bind(this);
+    this.query = this.query.bind(this);
     this.query = this.query.bind(this);
   }
 
@@ -152,7 +151,6 @@ class App extends Component {
         const newState = Object.assign({}, this.state);
         newState.queriedGrounds = data;
         newState.queried = true;
-        // console.log(newState);
         this.setState(newState);
       });
   }
@@ -236,7 +234,10 @@ class App extends Component {
                 hasFavs={this.state.hasFavs}
               />
             ) : (
-              <Login login={this.login} />
+              <Login
+                invalidUsername={this.state.invalidUsername}
+                login={this.login}
+              />
             )}
           </Route>
           <Route exact path='/camp'>
@@ -261,6 +262,7 @@ class App extends Component {
               <Results
                 queriedGrounds={this.state.queriedGrounds}
                 getWeather={this.getWeather}
+                resetQueried={this.resetQueried}
                 userId={this.state.userId}
               />
             )}
@@ -275,19 +277,9 @@ class App extends Component {
               <Signup signup={this.signup} />
             )}
           </Route>
-          <Route exact path='/landing'>
-            {queryResponse ? (
-              <Redirect to='/results' />
-            ) : (
-              <Login login={this.login} />
-            )}
-            render ={' '}
-            {() => (
-              <Landing
-                hasFavs={this.state.hasFavs}
-                userId={this.state.userId}
-              />
-            )}
+          <Route path='/landing'>
+            {queryResponse ? <Redirect to='/' /> : <Login login={this.login} />}
+            render = {() => <Landing hasFavs={this.state.hasFavs} />}
           </Route>
           <Route exact path='/landing/ayypresent'>
             <Landing hasFavs={this.state.hasFavs} userId={this.state.userId} />

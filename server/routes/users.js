@@ -28,6 +28,11 @@ router.post(
   }
 );
 
+/* when user clicks on 'remove' button on the camp card in the Landing page */
+router.delete('/favorites', userController.deleteFav, (req, res) => {
+  res.status(200);
+});
+
 // retrieves all of the logged in user's favorite camps upon successful login
 router.get('/favorites/:id', userController.getFav, (req, res, next) => {
   res.status(200).json(res.locals);
